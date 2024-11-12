@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: optimize-gateway-service
+    basedir: ${user.home}/.optimize/gateway-service
+    version: 1.0.0
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTIONS
+              - PATCH
+    config:
+      enabled: false
+  config:
+    import: "optional:configserver:localhost:8888"
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceURL:
+      defaultZone:  http://localhost:8761/eureka
+
+logging:
+  config: 'classpath:logback-spring.xml'
+  file:
+    path: ${spring.application.basedir}/logs
+  level:
+    org.springframework.cloud.commons.util.InetUtils: trace
+    #    org.springframework.security.oauth2: DEBUG
+
+server:
+  port: 9999
+  http:
+    port: 9998
+  ssl:
+    enabled: false
+
+reactor:
+  netty:
+    http:
+      server:
+        accessLogEnabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    env:
+      enabled: true
